@@ -1,0 +1,79 @@
+# Ejecuta el Fantasy Companion cada mañana en los servidores de GitHub.
+#
+# Necesita dos "secrets" en el repositorio (Settings → Secrets and variables → Actions):
+#   TOKEN_JSON : el contenido completo de tu token.json
+#   GH_PAT     : un token personal de GitHub con permiso para escribir secrets
+#                de este repositorio (sirve para guardar la sesión renovada)
+
+name: Fantasy diario
+
+on:
+  schedule:
+    # Hora en UTC: 05:17 UTC = 07:17 en Madrid en verano, 06:17 en invierno.
+    # (Evitamos la hora en punto: GitHub va más saturado y se retrasa.)
+    - cron: "17 5 * * *"
+  workflow_dispatch: # botón "Run workflow" para lanzarlo a mano
+
+permissions:
+  contents: write # para guardar fantasy.db e INFORME.md en el repo
+
+concurrency: fantasy # nunca dos ejecuciones a la vez
+
+jobs:
+  diario:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Restaurar la sesión de LaLiga
+        env:
+          TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
+        run: |
+          if [ -z "$TOKEN_JSON" ]; then
+            echo "::error::Falta el secret TOKEN_JSON (ver README, sección Despliegue)"
+            exit 1
+          fi
+          printf '%s' "$TOKEN_JSON" > token.json
+          sha256sum token.json > "$RUNNER_TEMP/token.sha"
+
+      - name: Descargar datos de la liga
+        run: python descargar.py
+
+      - name: Guardar la sesión renovada
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -f token.json ] && ! sha256sum --status -c "$RUNNER_TEMP/token.sha"; then
+            gh secret set TOKEN_JSON < token.json
+            echo "Sesión renovada y guardada en el secret TOKEN_JSON"
+          else
+            echo "La sesión no ha cambiado"
+          fi
+
+      - name: Generar el informe
+        run: python informe.py
+
+      - name: Guardar datos e informe en el repositorio
+        run: |
+          git config user.name "fantasy-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fantasy.db INFORME.md
+          git diff --cached --quiet || git commit -m "Datos del $(date -u +%F)"
+          git push
+
+      - name: Borrar la sesión del servidor
+        if: always()
+        run: rm -f token.json

@@ -1,0 +1,11 @@
+# Secretos: NUNCA a GitHub
+token.json
+.env
+
+# Datos locales (fantasy.db SÍ se sube: es el historial)
+datos_crudos/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
