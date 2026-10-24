@@ -1,6 +1,6 @@
 # ⚽ Fantasy Companion
 
-_Actualizado: 2026-10-24 21:04 UTC_
+_Actualizado: 2026-10-24 21:10 UTC_
 
 ## 💰 Saldos y cláusulas
 
