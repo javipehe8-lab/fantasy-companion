@@ -1,6 +1,6 @@
 # ⚽ Fantasy Companion
 
-_Actualizado: 2026-10-25 11:04 UTC_
+_Actualizado: 2026-10-25 15:49 UTC_
 
 ## 💰 Saldos y cláusulas
 
@@ -10,16 +10,16 @@ _Actualizado: 2026-10-25 11:04 UTC_
 Manager               Saldo bruto  Cláus. antes*  Cláus. exactas  Saldo ajustado
 --------------------------------------------------------------------------------
 pepemelchor         235.289.503 €   20.575.662 €             0 €   214.713.842 €
-Tony_789            165.358.814 €    4.146.245 €     1.402.735 €   159.809.834 €
-panagon              82.434.471 €    4.979.494 €             0 €    77.454.976 €
-javierCr7_           63.226.836 €    1.256.498 €             0 €    61.970.338 €  ← tú
-alebourrrreeeee      62.872.055 €   12.118.832 €             0 €    50.753.223 €
-varo-japonsport      26.891.932 €   19.810.648 €             0 €     7.081.284 €
+Tony_789            169.207.348 €    4.146.245 €     1.402.735 €   163.658.368 €
+panagon             131.349.196 €    4.979.494 €             0 €   126.369.702 €
+alebourrrreeeee      92.864.035 €   12.118.832 €             0 €    80.745.203 €
+varo-japonsport      43.609.348 €   19.810.648 €             0 €    23.798.700 €
+javierCr7_           12.232.953 €    1.256.498 €             0 €    10.976.454 €  ← tú
 
 * Gasto oculto anterior al 2026-10-24 (cláusulas): estimado, tiende a quedarse corto,
   salvo en los managers calibrados con calibracion.json.
 
-🎯 Tu equipo: saldo real 59.326.835 € · ajustado 61.970.338 € · error 2.643.502 €
+🎯 Tu equipo: saldo real 8.332.952 € · ajustado 10.976.454 € · error 2.643.502 €
    Si el error se mantiene igual día a día, la parte exacta está funcionando:
    lo que queda es el desfase de las subidas antiguas.
 
