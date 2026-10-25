@@ -63,14 +63,16 @@ jobs:
             echo "La sesión no ha cambiado"
           fi
 
-      - name: Generar el informe
-        run: python informe.py
+      - name: Generar el informe y los datos de la web
+        run: |
+          python informe.py
+          python exportar.py
 
       - name: Guardar datos e informe en el repositorio
         run: |
           git config user.name "fantasy-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add fantasy.db INFORME.md
+          git add fantasy.db INFORME.md web/datos.json
           git diff --cached --quiet || git commit -m "Datos del $(date -u +%F)"
           git push
 
