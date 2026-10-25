@@ -50,6 +50,13 @@ CREATE TABLE IF NOT EXISTS clausulas (
     PRIMARY KEY (fecha, manager_id, jugador_id)
 );
 
+-- Momento exacto (UTC) de la última foto de cada día, para saber si un
+-- fichaje ocurrió antes o después de ella.
+CREATE TABLE IF NOT EXISTS fotos (
+    fecha   TEXT PRIMARY KEY,
+    momento TEXT
+);
+
 -- Tu saldo real cada día (la API solo nos da el tuyo): sirve para validar.
 CREATE TABLE IF NOT EXISTS mi_saldo (
     fecha  TEXT PRIMARY KEY,
@@ -110,6 +117,11 @@ def guardar_plantilla(con, fecha: str, manager_id: int, jugadores: list) -> int:
         n += 1
     con.commit()
     return n
+
+
+def guardar_foto(con, fecha: str, momento: str) -> None:
+    con.execute("INSERT OR REPLACE INTO fotos VALUES (?,?)", (fecha, momento))
+    con.commit()
 
 
 def guardar_mi_saldo(con, fecha: str, dinero) -> None:

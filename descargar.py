@@ -6,11 +6,11 @@ Ejecútalo una vez al día (por ejemplo, por la mañana, después de que
 se actualicen los valores de mercado).
 """
 import json
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from fantasy.api import FantasyAPI, como_lista
-from fantasy.db import (conectar, guardar_actividad, guardar_jugadores,
+from fantasy.db import (conectar, guardar_actividad, guardar_foto, guardar_jugadores,
                         guardar_mi_saldo, guardar_plantilla)
 
 CARPETA_CRUDOS = Path(__file__).resolve().parent / "datos_crudos"
@@ -66,6 +66,7 @@ def main():
         guardar_crudo(f"equipo_{equipo['id']}", plantilla)
         jugadores_equipo = plantilla.get("players", []) if isinstance(plantilla, dict) else []
         total_clausulas += guardar_plantilla(con, hoy, manager_id, jugadores_equipo)
+    guardar_foto(con, hoy, datetime.now(timezone.utc).isoformat())
     print(f"✅ Cláusulas de {total_clausulas} jugadores de la liga guardadas")
 
     # 4) Actividad (fichajes, ventas, premios): base del saldo de los rivales
