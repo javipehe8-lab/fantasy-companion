@@ -104,6 +104,10 @@ def guardar_jugadores(con, jugadores: list, fecha: str) -> int:
 
 
 def guardar_plantilla(con, fecha: str, manager_id: int, jugadores: list) -> int:
+    # Si ya había una foto de este equipo hoy (por ejemplo, de una ejecución
+    # anterior), la sustituimos entera: así desaparecen los jugadores vendidos.
+    con.execute("DELETE FROM clausulas WHERE fecha = ? AND manager_id = ?",
+                (fecha, int(manager_id)))
     n = 0
     for p in jugadores:
         master = p.get("playerMaster") or {}
