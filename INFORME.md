@@ -1,73 +1,63 @@
 # ⚽ Fantasy Companion
 
-_Actualizado: 2026-10-25 09:51 UTC_
+_Actualizado: 2026-10-26 16:52 UTC_
 
 ## 💰 Saldos y cláusulas
 
 ```text
-🔒 Cláusulas y saldo ajustado · popot rebot (2 días de datos, desde 2026-10-24)
+🔒 Cláusulas y saldo ajustado · popot rebot (3 días de datos, desde 2026-10-24)
 
 Manager               Saldo bruto  Cláus. antes*  Cláus. exactas  Saldo ajustado
 --------------------------------------------------------------------------------
+Tony_789            248.152.184 €    4.146.245 €     1.402.735 €   242.603.204 €
 pepemelchor         235.289.503 €   20.575.662 €             0 €   214.713.842 €
-Tony_789            165.358.814 €    4.146.245 €     4.006.308 €   157.206.260 €
-panagon              82.434.471 €    4.979.494 €     4.776.640 €    72.678.336 €
-javierCr7_           63.226.836 €    1.256.498 €       557.924 €    61.412.414 €  ← tú
-alebourrrreeeee      62.872.055 €   12.118.832 €             0 €    50.753.223 €
-varo-japonsport      26.891.932 €   19.810.648 €        58.526 €     7.022.758 €
+panagon             107.049.475 €    4.979.494 €     1.000.000 €   101.069.980 €
+alebourrrreeeee      77.258.202 €   12.118.832 €             0 €    65.139.370 €
+javierCr7_           61.012.008 €    1.256.498 €             0 €    59.755.510 €  ← tú
+varo-japonsport      43.609.348 €   19.810.648 €             0 €    23.798.700 €
 
-* Estimación de subidas anteriores al 2026-10-24: tiende a quedarse corta.
+* Gasto oculto anterior al 2026-10-24 (cláusulas): estimado, tiende a quedarse corto,
+  salvo en los managers calibrados con calibracion.json.
 
-🎯 Tu equipo: saldo real 59.326.835 € · ajustado 61.412.414 € · error 2.085.578 €
+🎯 Tu equipo: saldo real 57.112.007 € · ajustado 59.755.510 € · error 2.643.502 €
    Si el error se mantiene igual día a día, la parte exacta está funcionando:
    lo que queda es el desfase de las subidas antiguas.
 
 ✅ Subidas detectadas con exactitud:
-  2026-10-25 · varo-japonsport · Álvaro García: 12.573.204 € → 12.690.257 €  (pagó 58.526 €)
-  2026-10-25 · panagon · Foyth: 10.642.261 € → 10.871.776 €  (pagó 114.758 €)
-  2026-10-25 · panagon · Moleiro: 84.119.939 € → 84.634.790 €  (pagó 257.426 €)
-  2026-10-25 · panagon · Diomande: 91.844.561 € → 94.819.604 €  (pagó 1.487.522 €)
-  2026-10-25 · panagon · Grimaldo: 85.166.129 € → 91.000.000 €  (pagó 2.916.936 €)
-  2026-10-25 · Tony_789 · Arda Güler: 110.566.460 € → 112.658.024 €  (pagó 1.045.782 €)
-  2026-10-25 · Tony_789 · Giménez: 23.487.539 € → 26.487.539 €  (pagó 1.500.000 €)
-  2026-10-25 · Tony_789 · E. Militão: 6.400.852 € → 6.544.866 €  (pagó 72.007 €)
-  2026-10-25 · Tony_789 · Valverde: 62.621.009 € → 64.094.092 €  (pagó 736.542 €)
-  2026-10-25 · Tony_789 · Pepelu: 26.736.718 € → 27.693.351 €  (pagó 478.316 €)
-  2026-10-25 · Tony_789 · Y. Zabiri: 38.441.841 € → 38.789.164 €  (pagó 173.662 €)
-  2026-10-25 · javierCr7_ · Agoumé: 19.133.612 € → 19.338.603 €  (pagó 102.496 €)
-  2026-10-25 · javierCr7_ · I. Akhomach: 12.856.236 € → 13.337.548 €  (pagó 240.656 €)
-  2026-10-25 · javierCr7_ · Cabrera: 9.836.399 € → 9.916.122 €  (pagó 39.862 €)
-  2026-10-25 · javierCr7_ · Guedes: 22.012.028 € → 22.361.850 €  (pagó 174.911 €)
+  2026-10-25 · Tony_789 · Giménez: 23.487.539 € → 26.487.539 €  (pagó 1.402.735 €)
+  2026-10-26 · panagon · Vivian: 12.715.028 € → 14.715.028 €  (pagó 1.000.000 €)
+
+ℹ️  22 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
 ```
 
 ## 📊 Subidas y bajadas de valor
 
 ```text
-Cambios de valor: 2026-10-24 → 2026-10-25
+Cambios de valor: 2026-10-25 → 2026-10-26
 
 📈 MÁS SUBEN
 ------------------------------------------------------------------------
-Diomande               DEL                   94.819.604 €   +2.975.043 € (+3.2%)
-Arda Güler             MED                  112.658.024 €   +2.091.564 € (+1.9%)
-Xavi Espart            DEF                   62.378.498 €   +2.057.268 € (+3.4%)
-Mbappé                 DEL                  169.225.216 €   +1.636.871 € (+1.0%)
-Fermín                 MED                   93.130.406 €   +1.595.781 € (+1.7%)
-Valverde               MED                   64.094.092 €   +1.473.083 € (+2.4%)
-Isco                   MED                   51.442.352 €   +1.409.509 € (+2.8%)
-Julián Alvarez         DEL                   38.263.654 €   +1.303.581 € (+3.5%)
-Rodri                  MED                   94.398.674 €   +1.261.685 € (+1.4%)
-Oyarzabal              DEL                   52.604.873 €   +1.179.442 € (+2.3%)
+Diomande               DEL                   97.516.254 €   +2.696.650 € (+2.8%)
+Julián Alvarez         DEL                   40.386.140 €   +2.122.486 € (+5.5%)
+Arda Güler             MED                  114.713.255 €   +2.055.231 € (+1.8%)
+Fermín                 MED                   94.756.109 €   +1.625.703 € (+1.7%)
+Mbappé                 DEL                  170.735.141 €   +1.509.925 € (+0.9%)
+Xavi Espart            DEF                   63.826.131 €   +1.447.633 € (+2.3%)
+Pepelu                 MED                   29.113.428 €   +1.420.077 € (+5.1%)
+Valverde               MED                   65.451.825 €   +1.357.733 € (+2.1%)
+Y. Zabiri              DEL                   40.057.343 €   +1.268.179 € (+3.3%)
+Budimir                DEL                   71.480.259 €   +1.214.054 € (+1.7%)
 
 📉 MÁS BAJAN
 ------------------------------------------------------------------------
-Vini Jr.               DEL                   67.496.559 €   -1.416.313 € (-2.1%)
-Cuti Romero            DEF                   59.766.023 €   -1.383.086 € (-2.3%)
-Olmo                   MED                   48.595.419 €   -1.179.577 € (-2.4%)
-Adeyemi                DEL                   66.004.061 €   -1.078.818 € (-1.6%)
-Aubameyang             DEL                   46.044.008 €   -1.052.716 € (-2.2%)
-Cucho                  DEL                   37.266.446 €     -971.887 € (-2.5%)
-Eric                   DEF                   40.943.007 €     -970.535 € (-2.3%)
-Laporte                DEF                   41.587.664 €     -916.892 € (-2.2%)
-Camello                DEL                   56.882.603 €     -888.863 € (-1.5%)
-Roberto                DEL                   52.912.903 €     -823.375 € (-1.5%)
+J. David               DEL                   78.560.820 €   -1.509.831 € (-1.9%)
+Cuti Romero            DEF                   58.401.170 €   -1.364.853 € (-2.3%)
+Vini Jr.               DEL                   66.228.601 €   -1.267.958 € (-1.9%)
+Olmo                   MED                   47.405.706 €   -1.189.713 € (-2.4%)
+Camello                DEL                   55.698.368 €   -1.184.235 € (-2.1%)
+Adeyemi                DEL                   64.888.795 €   -1.115.266 € (-1.7%)
+Roberto                DEL                   51.832.314 €   -1.080.589 € (-2.0%)
+Aubameyang             DEL                   45.003.365 €   -1.040.643 € (-2.3%)
+Eric                   DEF                   39.947.320 €     -995.687 € (-2.4%)
+Cucho                  DEL                   36.292.881 €     -973.565 € (-2.6%)
 ```
