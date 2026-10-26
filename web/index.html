@@ -61,9 +61,52 @@
       transition: border-color .15s;
     }
     .tarjeta:hover { border-color: var(--acento); }
-    .tarjeta .nombre { font-weight: 600; margin: 4px 0 2px; }
-    .tarjeta .meta { color: var(--suave); font-size: 12px; }
-    .tarjeta .valor { margin-top: 8px; font-size: 15px; }
+    .tarjeta .foto {
+      position: relative; height: 96px; margin: -12px -12px 8px;
+      border-radius: 12px 12px 0 0; overflow: hidden;
+      background: linear-gradient(180deg, #24303c, var(--tarjeta));
+      display: flex; justify-content: center; align-items: flex-end;
+    }
+    .tarjeta .foto img { height: 96px; width: auto; }
+    .tarjeta .pos {
+      position: absolute; top: 8px; left: 8px;
+      font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 6px;
+      background: rgba(0,0,0,.45);
+    }
+    .pos-1 { color: #f1c40f; } .pos-2 { color: #4da3ff; }
+    .pos-3 { color: #2ecc71; } .pos-4 { color: #ff5c5c; } .pos-5 { color: #b38cff; }
+    .tarjeta .nombre { font-weight: 600; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tarjeta .meta { color: var(--suave); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tarjeta .valor { margin-top: 8px; font-size: 15px; font-weight: 600; }
+    .tarjeta .difs { margin-top: 6px; font-size: 12px; display: grid; gap: 2px; }
+    .tarjeta .difs div { display: flex; justify-content: space-between; }
+    .tarjeta .difs .etq { color: var(--suave); }
+    .tarjeta .venta {
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--borde);
+      font-size: 12px; color: var(--suave); display: grid; gap: 2px;
+    }
+    .tarjeta .venta b { color: var(--texto); font-weight: 600; }
+    .seccion-nota { color: var(--suave); font-size: 13px; margin: -4px 0 10px; }
+
+    /* ---------- Saldos ---------- */
+    .saldos { display: grid; gap: 10px; }
+    .saldo {
+      background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 12px;
+      padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px;
+      align-items: center;
+    }
+    .saldo.yo { border-color: var(--acento); }
+    .saldo .quien { font-weight: 600; }
+    .saldo .cuanto { font-size: 20px; font-weight: 700; text-align: right; }
+    .saldo .detalle { grid-column: 1 / -1; color: var(--suave); font-size: 12px; }
+    .etiqueta {
+      font-size: 11px; padding: 2px 6px; border-radius: 6px; margin-left: 6px;
+      background: #24303c; color: var(--suave); font-weight: 500;
+    }
+    .barra { grid-column: 1 / -1; height: 6px; background: #24303c; border-radius: 3px; overflow: hidden; }
+    .barra div { height: 100%; background: var(--acento); }
+    .lista-subidas { color: var(--suave); font-size: 13px; padding-left: 18px; }
+    .lista-subidas b { color: var(--texto); }
 
     .sube { color: var(--sube); }
     .baja { color: var(--baja); }
@@ -94,6 +137,7 @@
     <button data-vista="yo" class="activa">Mi plantilla</button>
     <button data-vista="rivales">Rivales</button>
     <button data-vista="mercado">Mercado</button>
+    <button data-vista="saldos">Saldos</button>
   </nav>
 
   <main id="contenido"></main>
@@ -129,21 +173,50 @@
       return '<span class="neutro">= 0</span>';
     }
 
+    // "2026-10-26T16:37:00+01:00" -> "lun 16:37"
+    function cierre(iso) {
+      if (!iso) return "";
+      const d = new Date(iso);
+      return d.toLocaleDateString("es-ES", { weekday: "short" }) + " " +
+             d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+    }
+
     // =======================================================================
-    // TU PARTE: cómo se pinta la tarjeta de un jugador
+    // La tarjeta de un jugador
     // =======================================================================
     // Recibe el id y los datos de un jugador (lo que hay en datos.json) y
-    // devuelve el HTML de su tarjeta como texto.
-    //
-    // Ahora mismo solo muestra el nombre. TODO:
-    //   1. Añadir la posición y el equipo (pista: POSICIONES[jugador.posicion])
-    //   2. Añadir el valor actual (pista: la función millones)
-    //   3. Añadir la diferencia de hoy y la de ayer (pista: la función diferencia)
-    //   4. (Mercado) Si recibe "extra", mostrar el precio, el vendedor y las pujas
+    // devuelve el HTML de su tarjeta como texto. "extra" solo llega en el
+    // mercado: precio, vendedor, pujas y cierre.
     function tarjeta(id, jugador, extra) {
+      const pos = POSICIONES[jugador.posicion] || "";
+      const foto = jugador.foto
+        ? `<img src="${jugador.foto}" alt="" loading="lazy" onerror="this.remove()">`
+        : "";
+
+      let venta = "";
+      if (extra) {
+        venta = `
+          <div class="venta">
+            <div>Precio <b>${millones(extra.precio || 0)}</b></div>
+            ${extra.de_laliga ? "" : `<div>Vende <b>${extra.vendedor}</b></div>`}
+            <div>${extra.pujas || 0} ${extra.de_laliga ? "pujas" : "ofertas"} · cierra ${cierre(extra.cierra)}</div>
+          </div>`;
+      }
+
       return `
         <div class="tarjeta" data-id="${id}">
+          <div class="foto">
+            <span class="pos pos-${jugador.posicion}">${pos}</span>
+            ${foto}
+          </div>
           <div class="nombre">${jugador.nombre}</div>
+          <div class="meta">${jugador.equipo || ""}</div>
+          <div class="valor">${jugador.valor ? millones(jugador.valor) : "–"}</div>
+          <div class="difs">
+            <div><span class="etq">Hoy</span>${diferencia(jugador.dif_hoy)}</div>
+            <div><span class="etq">Ayer</span>${diferencia(jugador.dif_ayer)}</div>
+          </div>
+          ${venta}
         </div>`;
     }
 
@@ -176,16 +249,76 @@
         contenido.innerHTML = datos.managers.filter(m => m.soy_yo).map(bloqueManager).join("");
       } else if (vista === "rivales") {
         contenido.innerHTML = datos.managers.filter(m => !m.soy_yo).map(bloqueManager).join("");
+      } else if (vista === "saldos") {
+        contenido.innerHTML = vistaSaldos();
       } else {
-        const tarjetas = datos.mercado
-          .map(m => tarjeta(m.id, datos.jugadores[m.id], m))
-          .join("");
-        contenido.innerHTML = `
-          <section class="bloque">
-            <div class="bloque-cabecera"><h2>Mercado</h2></div>
-            <div class="rejilla">${tarjetas}</div>
-          </section>`;
+        const deLaLiga = datos.mercado.filter(m => m.de_laliga);
+        const deManagers = datos.mercado.filter(m => !m.de_laliga);
+        contenido.innerHTML =
+          seccionMercado("Mercado de LaLiga", "Se renueva cada día. Las pujas se resuelven al cierre.", deLaLiga) +
+          seccionMercado("En venta por los managers", "Jugadores que tus rivales han puesto a la venta.", deManagers);
       }
+    }
+
+    function vistaSaldos() {
+      const s = datos.saldos;
+      if (!s) return '<p class="seccion-nota">No hay saldos calculados todavía.</p>';
+
+      const maximo = Math.max(...s.filas.map(f => f.saldo), 1);
+      const filas = s.filas.map(f => {
+        const etiquetas =
+          (f.soy_yo ? '<span class="etiqueta">tú</span>' : "") +
+          (f.calibrado ? '<span class="etiqueta">calibrado</span>' : "");
+        const real = f.soy_yo && s.real != null
+          ? ` · saldo real ${millones(s.real)}` : "";
+        const ancho = Math.max(0, f.saldo) / maximo * 100;
+        return `
+          <div class="saldo ${f.soy_yo ? "yo" : ""}">
+            <div class="quien">${f.nombre}${etiquetas}</div>
+            <div class="cuanto ${f.saldo < 0 ? "baja" : ""}">${millones(f.saldo)}</div>
+            <div class="barra"><div style="width:${ancho}%"></div></div>
+            <div class="detalle">
+              Movimientos ${millones(f.bruto)} · cláusulas antiguas −${millones(f.gasto_antes)}
+              · cláusulas detectadas −${millones(f.gasto_exacto)}${real}
+            </div>
+          </div>`;
+      }).join("");
+
+      const subidas = s.subidas_exactas.length
+        ? `<ul class="lista-subidas">${s.subidas_exactas.map(x =>
+            `<li>${x.fecha} · <b>${x.manager}</b> subió la cláusula de ${x.jugador} (pagó ${millones(x.coste)})</li>`
+          ).join("")}</ul>`
+        : '<p class="seccion-nota">Ninguna subida de cláusula detectada.</p>';
+
+      return `
+        <section class="bloque">
+          <div class="bloque-cabecera"><h2>Saldo estimado</h2></div>
+          <p class="seccion-nota">
+            Dinero que calculo que tiene cada uno a partir de sus fichajes, ventas, premios
+            y cláusulas. Las cláusulas subidas antes del ${s.desde} son una estimación:
+            el saldo real puede ser algo menor.
+          </p>
+          <div class="saldos">${filas}</div>
+        </section>
+        <section class="bloque">
+          <div class="bloque-cabecera"><h2>Subidas de cláusula detectadas</h2></div>
+          ${subidas}
+        </section>`;
+    }
+
+    function seccionMercado(titulo, nota, items) {
+      // Los más caros primero
+      const ordenados = [...items].sort((a, b) => (b.precio || 0) - (a.precio || 0));
+      const tarjetas = ordenados
+        .filter(m => datos.jugadores[m.id])
+        .map(m => tarjeta(m.id, datos.jugadores[m.id], m))
+        .join("");
+      return `
+        <section class="bloque">
+          <div class="bloque-cabecera"><h2>${titulo} (${items.length})</h2></div>
+          <p class="seccion-nota">${nota}</p>
+          <div class="rejilla">${tarjetas || '<p class="seccion-nota">Nada en venta ahora mismo.</p>'}</div>
+        </section>`;
     }
 
     // =======================================================================

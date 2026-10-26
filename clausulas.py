@@ -129,10 +129,11 @@ def bruto_hasta(movimientos, manager_id, fecha):
     return SALDO_INICIAL + calcular_movimientos(hasta).get(manager_id, 0)
 
 
-def main():
+def calcular_saldos(con=None) -> dict:
+    """Calcula el saldo estimado de cada manager. Lo usan main() y exportar.py."""
     liga = leer("ligas")[0]
     clasificacion = leer("clasificacion")
-    con = conectar()
+    con = con or conectar()
 
     fechas = [r[0] for r in con.execute("SELECT DISTINCT fecha FROM clausulas ORDER BY fecha")]
     if not fechas:
@@ -146,17 +147,13 @@ def main():
     nombre_manager = {int(c["team"]["manager"]["id"]): c["team"]["manager"]["managerName"]
                       for c in clasificacion}
 
-    gasto_hist, detalle_hist = estimacion_historica(con, fechas[0], compras)
+    gasto_hist, _ = estimacion_historica(con, fechas[0], compras)
     gasto_exacto, detalle_exacto, dudosas = subidas_exactas(con, fechas, compras)
 
     mi_equipo = str(liga["team"]["id"])
     mi_manager = next((int(c["team"]["manager"]["id"]) for c in clasificacion
                        if str(c["team"]["id"]) == mi_equipo), None)
 
-    dias = f"{len(fechas)} día{'s' if len(fechas) > 1 else ''} de datos, desde {fechas[0]}"
-    print(f"🔒 Cláusulas y saldo ajustado · {liga['name']} ({dias})\n")
-    print(f"{'Manager':<18} {'Saldo bruto':>14} {'Cláus. antes*':>14} {'Cláus. exactas':>15} {'Saldo ajustado':>15}")
-    print("-" * 80)
     calibracion = cargar_calibracion()
     filas, notas = [], []
     for mid, nombre in nombre_manager.items():
@@ -168,23 +165,47 @@ def main():
             hist = bruto_hasta(movimientos, mid, cal["fecha"]) - cal["saldo"]
             notas.append(f"{nombre}: calibrado con {euros(cal['saldo'])} el {cal['fecha']} "
                          f"→ gasto oculto previo ≈ {euros(hist)}")
-        ajustado = bruto - hist - gasto_exacto[mid]
-        filas.append((nombre, bruto, hist, gasto_exacto[mid], ajustado, mid == mi_manager, bool(cal)))
-    for nombre, bruto, hist, exacto, ajustado, soy_yo, calibrado in sorted(filas, key=lambda f: -f[4]):
-        marca = "  ← tú" if soy_yo else ("  (calibrado)" if calibrado else "")
-        print(f"{nombre[:18]:<18} {euros(bruto):>14} {euros(hist):>14} {euros(exacto):>15} {euros(ajustado):>15}{marca}")
+        filas.append({
+            "id": mid, "nombre": nombre, "bruto": bruto,
+            "gasto_antes": round(hist), "gasto_exacto": round(gasto_exacto[mid]),
+            "saldo": round(bruto - hist - gasto_exacto[mid]),
+            "soy_yo": mid == mi_manager, "calibrado": bool(cal),
+        })
+    filas.sort(key=lambda f: -f["saldo"])
+
+    real = con.execute("SELECT dinero FROM mi_saldo ORDER BY fecha DESC LIMIT 1").fetchone()
+    real = real[0] if real else liga["team"].get("money")
+
+    return {
+        "liga": liga, "fechas": fechas, "filas": filas, "notas": notas, "real": real,
+        "detalle_exacto": detalle_exacto, "dudosas": dudosas,
+        "nombre_jugador": nombre_jugador, "nombre_manager": nombre_manager,
+    }
+
+
+def main():
+    r = calcular_saldos()
+    fechas, nombre_jugador, nombre_manager = r["fechas"], r["nombre_jugador"], r["nombre_manager"]
+    detalle_exacto, dudosas = r["detalle_exacto"], r["dudosas"]
+
+    dias = f"{len(fechas)} día{'s' if len(fechas) > 1 else ''} de datos, desde {fechas[0]}"
+    print(f"🔒 Cláusulas y saldo ajustado · {r['liga']['name']} ({dias})\n")
+    print(f"{'Manager':<18} {'Saldo bruto':>14} {'Cláus. antes*':>14} {'Cláus. exactas':>15} {'Saldo ajustado':>15}")
+    print("-" * 80)
+    for f in r["filas"]:
+        marca = "  ← tú" if f["soy_yo"] else ("  (calibrado)" if f["calibrado"] else "")
+        print(f"{f['nombre'][:18]:<18} {euros(f['bruto']):>14} {euros(f['gasto_antes']):>14} "
+              f"{euros(f['gasto_exacto']):>15} {euros(f['saldo']):>15}{marca}")
     print(f"\n* Gasto oculto anterior al {fechas[0]} (cláusulas): estimado, tiende a quedarse corto,")
     print("  salvo en los managers calibrados con calibracion.json.")
-    for n in notas:
+    for n in r["notas"]:
         print(f"  · {n}")
 
     # Validación con tu saldo real
-    real = con.execute("SELECT dinero FROM mi_saldo ORDER BY fecha DESC LIMIT 1").fetchone()
-    real = real[0] if real else liga["team"].get("money")
-    for nombre, bruto, hist, exacto, ajustado, soy_yo, _ in filas:
-        if soy_yo and real is not None:
-            print(f"\n🎯 Tu equipo: saldo real {euros(real)} · ajustado {euros(ajustado)} "
-                  f"· error {euros(ajustado - real)}")
+    for f in r["filas"]:
+        if f["soy_yo"] and r["real"] is not None:
+            print(f"\n🎯 Tu equipo: saldo real {euros(r['real'])} · ajustado {euros(f['saldo'])} "
+                  f"· error {euros(f['saldo'] - r['real'])}")
             if len(fechas) > 1:
                 print("   Si el error se mantiene igual día a día, la parte exacta está funcionando:")
                 print("   lo que queda es el desfase de las subidas antiguas.")

@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fantasy.db import conectar
+from clausulas import calcular_saldos
 
 CARPETA = Path(__file__).resolve().parent
 CRUDOS = CARPETA / "datos_crudos"
@@ -109,6 +110,27 @@ def managers_info() -> tuple:
     return nombres, yo
 
 
+def foto_de(jugador: dict):
+    """URL de la foto de un jugador (viene dentro de playerMaster)."""
+    return ((jugador.get("images") or {}).get("transparent") or {}).get("256x256")
+
+
+def fotos() -> dict:
+    """{jugador_id: url_foto} sacado de las plantillas y del mercado."""
+    resultado = {}
+    for ruta in CRUDOS.glob("equipo_*.json"):
+        equipo = json.loads(ruta.read_text(encoding="utf-8"))
+        for p in equipo.get("players", []):
+            jugador = p.get("playerMaster") or {}
+            if jugador.get("id") and foto_de(jugador):
+                resultado[int(jugador["id"])] = foto_de(jugador)
+    for item in leer_crudo("mercado") or []:
+        jugador = item.get("playerMaster") or {}
+        if jugador.get("id") and foto_de(jugador):
+            resultado[int(jugador["id"])] = foto_de(jugador)
+    return resultado
+
+
 def mercado() -> list:
     """Jugadores en venta: id, precio, quién lo vende, nº de pujas y cierre."""
     resultado = []
@@ -121,6 +143,9 @@ def mercado() -> list:
             "id": int(jugador["id"]),
             "precio": item.get("salePrice"),
             "vendedor": vendedor or "LaLiga",
+            # marketPlayerLeague = lo pone LaLiga y se renueva cada día
+            # marketPlayerTeam   = lo ha puesto a la venta un manager
+            "de_laliga": item.get("discr") == "marketPlayerLeague",
             "pujas": item.get("numberOfBids", item.get("numberOfOffers", 0)),
             "cierra": item.get("expirationDate"),
         })
@@ -154,6 +179,7 @@ def main():
     visibles = {j for lista in equipos.values() for j in lista} | {m["id"] for m in en_venta}
 
     info = {f["id"]: f for f in con.execute("SELECT id, nombre, equipo, posicion FROM jugadores")}
+    urls = fotos()
 
     jugadores = {}
     for jid in visibles:
@@ -162,6 +188,7 @@ def main():
             "nombre": datos["nombre"] if datos else f"#{jid}",
             "equipo": datos["equipo"] if datos else None,
             "posicion": datos["posicion"] if datos else None,
+            "foto": urls.get(jid),
             "valor": valor_en(con, jid, hoy),
             "dif_hoy": subida_bajada(con, jid, ayer, hoy),
             "dif_ayer": subida_bajada(con, jid, anteayer, ayer),
@@ -182,8 +209,27 @@ def main():
     # Tú primero, luego el resto por lo que han ganado hoy
     managers.sort(key=lambda m: (not m["soy_yo"], -(m["total_hoy"] or 0)))
 
+    # Saldos: mismo cálculo que clausulas.py (si falla, la web sigue funcionando)
+    try:
+        r = calcular_saldos(con)
+        saldos = {
+            "filas": r["filas"],
+            "real": r["real"],
+            "desde": r["fechas"][0],
+            "subidas_exactas": [
+                {"fecha": fecha, "manager": r["nombre_manager"].get(mid, mid),
+                 "jugador": r["nombre_jugador"].get(jid, jid), "coste": round(coste)}
+                for mid, lista in r["detalle_exacto"].items()
+                for fecha, jid, _antes, _ahora, coste in lista
+            ],
+        }
+    except (SystemExit, Exception) as error:
+        print(f"⚠️  No se pudieron calcular los saldos: {error}")
+        saldos = None
+
     salida = {
         "generado": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+        "saldos": saldos,
         "fechas": {"hoy": hoy, "ayer": ayer, "anteayer": anteayer},
         "jugadores": jugadores,
         "managers": managers,
