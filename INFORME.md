@@ -1,6 +1,6 @@
 # ⚽ Fantasy Companion
 
-_Actualizado: 2026-10-26 16:52 UTC_
+_Actualizado: 2026-10-26 17:09 UTC_
 
 ## 💰 Saldos y cláusulas
 
@@ -9,9 +9,9 @@ _Actualizado: 2026-10-26 16:52 UTC_
 
 Manager               Saldo bruto  Cláus. antes*  Cláus. exactas  Saldo ajustado
 --------------------------------------------------------------------------------
-Tony_789            248.152.184 €    4.146.245 €     1.402.735 €   242.603.204 €
+Tony_789            248.152.184 €    4.146.245 €     3.402.735 €   240.603.204 €
 pepemelchor         235.289.503 €   20.575.662 €             0 €   214.713.842 €
-panagon             107.049.475 €    4.979.494 €     1.000.000 €   101.069.980 €
+panagon             107.651.785 €    4.979.494 €     1.000.000 €   101.672.290 €
 alebourrrreeeee      77.258.202 €   12.118.832 €             0 €    65.139.370 €
 javierCr7_           61.012.008 €    1.256.498 €             0 €    59.755.510 €  ← tú
 varo-japonsport      43.609.348 €   19.810.648 €             0 €    23.798.700 €
@@ -19,15 +19,16 @@ varo-japonsport      43.609.348 €   19.810.648 €             0 €    23.798
 * Gasto oculto anterior al 2026-10-24 (cláusulas): estimado, tiende a quedarse corto,
   salvo en los managers calibrados con calibracion.json.
 
-🎯 Tu equipo: saldo real 57.112.007 € · ajustado 59.755.510 € · error 2.643.502 €
+🎯 Tu equipo: saldo real 57.112.007 € · ajustado 59.755.510 € · error 2.643.503 €
    Si el error se mantiene igual día a día, la parte exacta está funcionando:
    lo que queda es el desfase de las subidas antiguas.
 
 ✅ Subidas detectadas con exactitud:
   2026-10-25 · Tony_789 · Giménez: 23.487.539 € → 26.487.539 €  (pagó 1.402.735 €)
+  2026-10-26 · Tony_789 · Giménez: 26.487.539 € → 30.487.539 €  (pagó 2.000.000 €)
   2026-10-26 · panagon · Vivian: 12.715.028 € → 14.715.028 €  (pagó 1.000.000 €)
 
-ℹ️  22 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
+ℹ️  21 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
 ```
 
 ## 📊 Subidas y bajadas de valor
