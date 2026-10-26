@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fantasy Companion</title>
+  <!-- Chart.js: la librería que dibuja la gráfica -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    /* ---------- Colores (tema oscuro) ---------- */
+    :root {
+      --fondo: #0f1419;
+      --tarjeta: #1a2129;
+      --borde: #2a333d;
+      --texto: #e6edf3;
+      --suave: #8b98a5;
+      --sube: #2ecc71;
+      --baja: #ff5c5c;
+      --acento: #4da3ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+    }
+    header { padding: 16px; border-bottom: 1px solid var(--borde); }
+    header h1 { margin: 0; font-size: 20px; }
+    header p { margin: 4px 0 0; color: var(--suave); font-size: 13px; }
+
+    /* ---------- Pestañas ---------- */
+    nav { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; }
+    nav button {
+      background: var(--tarjeta); color: var(--texto);
+      border: 1px solid var(--borde); border-radius: 999px;
+      padding: 8px 14px; font-size: 14px; cursor: pointer; white-space: nowrap;
+    }
+    nav button.activa { background: var(--acento); border-color: var(--acento); color: #fff; }
+
+    main { padding: 0 16px 32px; max-width: 1100px; margin: 0 auto; }
+
+    /* ---------- Bloque de un manager ---------- */
+    .bloque { margin-top: 20px; }
+    .bloque-cabecera {
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 8px; margin-bottom: 10px;
+    }
+    .bloque-cabecera h2 { margin: 0; font-size: 17px; }
+    .totales { font-size: 14px; color: var(--suave); }
+
+    /* ---------- Rejilla de tarjetas ---------- */
+    .rejilla {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .tarjeta {
+      background: var(--tarjeta); border: 1px solid var(--borde);
+      border-radius: 12px; padding: 12px; cursor: pointer;
+      transition: border-color .15s;
+    }
+    .tarjeta:hover { border-color: var(--acento); }
+    .tarjeta .nombre { font-weight: 600; margin: 4px 0 2px; }
+    .tarjeta .meta { color: var(--suave); font-size: 12px; }
+    .tarjeta .valor { margin-top: 8px; font-size: 15px; }
+
+    .sube { color: var(--sube); }
+    .baja { color: var(--baja); }
+    .neutro { color: var(--suave); }
+
+    /* ---------- Ventana de la gráfica ---------- */
+    #modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,.7);
+      display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    #modal.abierto { display: flex; }
+    #modal .caja {
+      background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 14px;
+      width: 100%; max-width: 640px; padding: 16px;
+    }
+    #modal .caja-cabecera { display: flex; justify-content: space-between; align-items: center; }
+    #modal h3 { margin: 0; }
+    #cerrar { background: none; border: none; color: var(--texto); font-size: 24px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚽ Fantasy Companion</h1>
+    <p id="actualizado">Cargando…</p>
+  </header>
+
+  <nav>
+    <button data-vista="yo" class="activa">Mi plantilla</button>
+    <button data-vista="rivales">Rivales</button>
+    <button data-vista="mercado">Mercado</button>
+  </nav>
+
+  <main id="contenido"></main>
+
+  <div id="modal">
+    <div class="caja">
+      <div class="caja-cabecera">
+        <h3 id="modal-titulo"></h3>
+        <button id="cerrar" aria-label="Cerrar">×</button>
+      </div>
+      <canvas id="grafica" height="220"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // =======================================================================
+    // Utilidades
+    // =======================================================================
+    const POSICIONES = { 1: "POR", 2: "DEF", 3: "MED", 4: "DEL", 5: "ENT" };
+
+    // 12345678 -> "12,35 M€"
+    function millones(euros) {
+      return (euros / 1_000_000).toLocaleString("es-ES", {
+        minimumFractionDigits: 2, maximumFractionDigits: 2,
+      }) + " M€";
+    }
+
+    // Diferencia con flecha y color: "▲ +0,25 M€" en verde, "▼ -0,10 M€" en rojo
+    function diferencia(valor) {
+      if (valor === null || valor === undefined) return '<span class="neutro">–</span>';
+      if (valor > 0) return `<span class="sube">▲ +${millones(valor)}</span>`;
+      if (valor < 0) return `<span class="baja">▼ ${millones(valor)}</span>`;
+      return '<span class="neutro">= 0</span>';
+    }
+
+    // =======================================================================
+    // TU PARTE: cómo se pinta la tarjeta de un jugador
+    // =======================================================================
+    // Recibe el id y los datos de un jugador (lo que hay en datos.json) y
+    // devuelve el HTML de su tarjeta como texto.
+    //
+    // Ahora mismo solo muestra el nombre. TODO:
+    //   1. Añadir la posición y el equipo (pista: POSICIONES[jugador.posicion])
+    //   2. Añadir el valor actual (pista: la función millones)
+    //   3. Añadir la diferencia de hoy y la de ayer (pista: la función diferencia)
+    //   4. (Mercado) Si recibe "extra", mostrar el precio, el vendedor y las pujas
+    function tarjeta(id, jugador, extra) {
+      return `
+        <div class="tarjeta" data-id="${id}">
+          <div class="nombre">${jugador.nombre}</div>
+        </div>`;
+    }
+
+    // =======================================================================
+    // Vistas
+    // =======================================================================
+    let datos = null;
+
+    function bloqueManager(manager) {
+      const tarjetas = manager.jugadores
+        .map(id => tarjeta(id, datos.jugadores[id]))
+        .join("");
+      return `
+        <section class="bloque">
+          <div class="bloque-cabecera">
+            <h2>${manager.nombre}</h2>
+            <div class="totales">
+              Valor ${millones(manager.valor_total || 0)} ·
+              Hoy ${diferencia(manager.total_hoy)} ·
+              Ayer ${diferencia(manager.total_ayer)}
+            </div>
+          </div>
+          <div class="rejilla">${tarjetas}</div>
+        </section>`;
+    }
+
+    function pintar(vista) {
+      const contenido = document.getElementById("contenido");
+      if (vista === "yo") {
+        contenido.innerHTML = datos.managers.filter(m => m.soy_yo).map(bloqueManager).join("");
+      } else if (vista === "rivales") {
+        contenido.innerHTML = datos.managers.filter(m => !m.soy_yo).map(bloqueManager).join("");
+      } else {
+        const tarjetas = datos.mercado
+          .map(m => tarjeta(m.id, datos.jugadores[m.id], m))
+          .join("");
+        contenido.innerHTML = `
+          <section class="bloque">
+            <div class="bloque-cabecera"><h2>Mercado</h2></div>
+            <div class="rejilla">${tarjetas}</div>
+          </section>`;
+      }
+    }
+
+    // =======================================================================
+    // Gráfica al pinchar en un jugador
+    // =======================================================================
+    let grafica = null;
+
+    function abrirGrafica(id) {
+      const jugador = datos.jugadores[id];
+      document.getElementById("modal-titulo").textContent = jugador.nombre;
+      document.getElementById("modal").classList.add("abierto");
+
+      if (grafica) grafica.destroy();   // borra la gráfica anterior
+      grafica = new Chart(document.getElementById("grafica"), {
+        type: "line",
+        data: {
+          labels: jugador.historial.map(([fecha]) => fecha.slice(5)),   // "10-25"
+          datasets: [{
+            data: jugador.historial.map(([, valor]) => valor / 1_000_000),
+            borderColor: "#4da3ff",
+            backgroundColor: "rgba(77,163,255,.15)",
+            fill: true, tension: 0.25, pointRadius: 3,
+          }],
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: "#8b98a5" }, grid: { color: "#2a333d" } },
+            y: { ticks: { color: "#8b98a5", callback: v => v + " M" }, grid: { color: "#2a333d" } },
+          },
+        },
+      });
+    }
+
+    function cerrarGrafica() {
+      document.getElementById("modal").classList.remove("abierto");
+    }
+
+    // =======================================================================
+    // Arranque
+    // =======================================================================
+    async function iniciar() {
+      const respuesta = await fetch("datos.json", { cache: "no-store" });
+      datos = await respuesta.json();
+      document.getElementById("actualizado").textContent =
+        `Datos del ${datos.fechas.hoy}`;
+
+      // Pestañas
+      document.querySelectorAll("nav button").forEach(boton => {
+        boton.addEventListener("click", () => {
+          document.querySelectorAll("nav button").forEach(b => b.classList.remove("activa"));
+          boton.classList.add("activa");
+          pintar(boton.dataset.vista);
+        });
+      });
+
+      // Clic en cualquier tarjeta -> gráfica
+      document.getElementById("contenido").addEventListener("click", evento => {
+        const t = evento.target.closest(".tarjeta");
+        if (t) abrirGrafica(t.dataset.id);
+      });
+
+      // Cerrar: botón ×, clic fuera de la caja o tecla Escape
+      document.getElementById("cerrar").addEventListener("click", cerrarGrafica);
+      document.getElementById("modal").addEventListener("click", e => {
+        if (e.target.id === "modal") cerrarGrafica();
+      });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarGrafica(); });
+
+      pintar("yo");
+    }
+
+    iniciar().catch(error => {
+      document.getElementById("actualizado").textContent =
+        "No se pudo cargar datos.json: " + error.message;
+    });
+  </script>
+</body>
+</html>

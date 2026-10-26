@@ -68,14 +68,16 @@ def historial(con, jugador_id: int) -> list:
 # ---------------------------------------------------------------------------
 
 def plantillas(con) -> dict:
-    """{manager_id: [jugador_id, ...]} según la última foto de cláusulas."""
-    ultima = con.execute("SELECT MAX(fecha) FROM clausulas").fetchone()[0]
+    """{manager_id: [jugador_id, ...]} según la foto de cláusulas más reciente
+    DE CADA MANAGER (si un día falta la de alguno, se usa la anterior)."""
     resultado = {}
-    if ultima is None:
-        return resultado
-    for fila in con.execute(
-        "SELECT manager_id, jugador_id FROM clausulas WHERE fecha = ?", (ultima,)
-    ):
+    for fila in con.execute("""
+        SELECT c.manager_id, c.jugador_id
+        FROM clausulas c
+        JOIN (SELECT manager_id, MAX(fecha) AS ultima
+              FROM clausulas GROUP BY manager_id) u
+          ON u.manager_id = c.manager_id AND u.ultima = c.fecha
+    """):
         # setdefault: si el manager aún no está en el diccionario, crea su lista vacía
         resultado.setdefault(fila["manager_id"], []).append(fila["jugador_id"])
     return resultado
@@ -143,8 +145,9 @@ def main():
     if hoy is None:
         raise SystemExit("No hay datos todavía. Ejecuta antes descargar.py")
 
-    equipos = plantillas(con)
     nombres, yo = managers_info()
+    # Solo managers que siguen en la liga (por si alguno se va)
+    equipos = {m: js for m, js in plantillas(con).items() if not nombres or m in nombres}
     en_venta = mercado()
 
     # Todos los jugadores que la web va a mostrar, sin repetir
