@@ -1,25 +1,25 @@
 # ⚽ Fantasy Companion
 
-_Actualizado: 2026-10-31 10:57 UTC_
+_Actualizado: 2026-11-01 11:52 UTC_
 
 ## 💰 Saldos y cláusulas
 
 ```text
-🔒 Cláusulas y saldo ajustado · popot rebot (8 días de datos, desde 2026-10-24)
+🔒 Cláusulas y saldo ajustado · popot rebot (9 días de datos, desde 2026-10-24)
 
 Manager               Saldo bruto  Cláus. antes*  Cláus. exactas  Saldo ajustado
 --------------------------------------------------------------------------------
-panagon             268.220.463 €    4.979.494 €     2.873.952 €   260.367.016 €
-pepemelchor         202.810.125 €   20.575.662 €             0 €   182.234.464 €
-Tony_789             87.618.542 €    4.146.245 €     8.676.204 €    74.796.094 €
-javierCr7_           62.315.732 €    1.256.498 €             0 €    61.059.234 €  ← tú
-alebourrrreeeee      19.829.611 €   12.118.832 €           100 €     7.710.679 €
+panagon             255.232.382 €    4.979.494 €     9.873.952 €   240.378.936 €
+pepemelchor         201.810.125 €   20.575.662 €             0 €   181.234.464 €
+Tony_789            152.626.786 €    4.146.245 €     8.676.204 €   139.804.338 €
+javierCr7_           62.315.732 €    1.256.498 €     1.850.538 €    59.208.696 €  ← tú
+alebourrrreeeee      43.211.512 €   12.118.832 €           100 €    31.092.580 €
 varo-japonsport      25.694.872 €   19.810.648 €             0 €     5.884.224 €
 
 * Gasto oculto anterior al 2026-10-24 (cláusulas): estimado, tiende a quedarse corto,
   salvo en los managers calibrados con calibracion.json.
 
-🎯 Tu equipo: saldo real 57.015.731 € · ajustado 61.059.234 € · error 4.043.503 €
+🎯 Tu equipo: saldo real 55.015.731 € · ajustado 59.208.696 € · error 4.192.965 €
    Si el error se mantiene igual día a día, la parte exacta está funcionando:
    lo que queda es el desfase de las subidas antiguas.
 
@@ -31,39 +31,41 @@ varo-japonsport      25.694.872 €   19.810.648 €             0 €     5.884
   2026-10-30 · Tony_789 · Y. Zabiri: 46.246.816 € → 50.246.816 €  (pagó 2.000.000 €)
   2026-10-26 · panagon · Vivian: 12.715.028 € → 14.715.028 €  (pagó 1.000.000 €)
   2026-10-30 · panagon · Foyth: 11.900.527 € → 15.900.527 €  (pagó 1.873.952 €)
+  2026-11-01 · panagon · Ionut Radu: 50.000.000 € → 64.000.000 €  (pagó 7.000.000 €)
   2026-10-28 · alebourrrreeeee · Vlachodimos: 27.531.339 € → 27.531.539 €  (pagó 100 €)
+  2026-11-01 · javierCr7_ · Agoumé: 20.305.222 € → 24.305.222 €  (pagó 1.850.538 €)
 
-ℹ️  82 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
+ℹ️  94 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
 ```
 
 ## 📊 Subidas y bajadas de valor
 
 ```text
-Cambios de valor: 2026-10-30 → 2026-10-31
+Cambios de valor: 2026-10-31 → 2026-11-01
 
 📈 MÁS SUBEN
 ------------------------------------------------------------------------
-Julián Alvarez         DEL                   51.368.524 €   +2.068.908 € (+4.2%)
-Diomande               DEL                  109.232.805 €   +1.745.624 € (+1.6%)
-Berenguer              DEL                   17.367.151 €   +1.191.782 € (+7.4%)
-Fer Niño               DEL                   46.896.666 €   +1.172.835 € (+2.6%)
-Pepelu                 MED                   35.299.952 €   +1.170.168 € (+3.4%)
-Isco                   MED                   58.746.621 €   +1.095.385 € (+1.9%)
-Nico Williams          DEL                   43.617.783 €     +886.079 € (+2.1%)
-Paredes                DEF                   27.992.063 €     +825.635 € (+3.0%)
-Fofana                 MED                   37.103.395 €     +813.265 € (+2.2%)
-Mikautadze             DEL                   37.793.288 €     +742.417 € (+2.0%)
+Julián Alvarez         DEL                   53.582.476 €   +2.213.952 € (+4.3%)
+Diomande               DEL                  110.999.485 €   +1.766.680 € (+1.6%)
+Grimaldo               DEF                   90.780.715 €   +1.517.492 € (+1.7%)
+Fer Niño               DEL                   48.179.948 €   +1.283.282 € (+2.7%)
+Mbappé                 DEL                  178.501.103 €   +1.232.427 € (+0.7%)
+Pepelu                 MED                   36.490.731 €   +1.190.779 € (+3.4%)
+Berenguer              DEL                   18.549.874 €   +1.182.723 € (+6.8%)
+Isco                   MED                   59.925.300 €   +1.178.679 € (+2.0%)
+Bellingham             MED                  130.726.678 €   +1.061.936 € (+0.8%)
+Nico Williams          DEL                   44.678.418 €   +1.060.635 € (+2.4%)
 
 📉 MÁS BAJAN
 ------------------------------------------------------------------------
-Xavi Espart            DEF                   56.203.624 €   -1.541.418 € (-2.7%)
-Lamine Yamal           DEL                  189.783.727 €   -1.203.375 € (-0.6%)
-J. David               DEL                   70.784.510 €   -1.182.791 € (-1.6%)
-Vini Jr.               DEL                   59.990.641 €   -1.176.481 € (-1.9%)
-Olmo                   MED                   41.640.223 €   -1.069.352 € (-2.5%)
-Cucho                  DEL                   31.661.886 €     -874.308 € (-2.7%)
-Eric                   DEF                   35.273.753 €     -864.265 € (-2.4%)
-Rodri                  MED                   92.822.631 €     -858.547 € (-0.9%)
-Adeyemi                DEL                   58.918.446 €     -829.437 € (-1.4%)
-Valverde               MED                   67.401.439 €     -746.870 € (-1.1%)
+J. David               DEL                   69.305.587 €   -1.478.923 € (-2.1%)
+Xavi Espart            DEF                   54.811.044 €   -1.392.580 € (-2.5%)
+Rodri                  MED                   91.723.783 €   -1.098.848 € (-1.2%)
+Olmo                   MED                   40.673.907 €     -966.316 € (-2.3%)
+Adeyemi                DEL                   58.015.002 €     -903.444 € (-1.5%)
+C. Soler               MED                   52.045.570 €     -896.280 € (-1.7%)
+Vini Jr.               DEL                   59.190.536 €     -800.105 € (-1.3%)
+Budimir                DEL                   70.720.873 €     -794.851 € (-1.1%)
+Valverde               MED                   66.608.996 €     -792.443 € (-1.2%)
+Cucho                  DEL                   30.873.666 €     -788.220 € (-2.5%)
 ```
