@@ -1,25 +1,25 @@
 # ⚽ Fantasy Companion
 
-_Actualizado: 2026-11-06 12:59 UTC_
+_Actualizado: 2026-11-07 11:46 UTC_
 
 ## 💰 Saldos y cláusulas
 
 ```text
-🔒 Cláusulas y saldo ajustado · popot rebot (14 días de datos, desde 2026-10-24)
+🔒 Cláusulas y saldo ajustado · popot rebot (15 días de datos, desde 2026-10-24)
 
 Manager               Saldo bruto  Cláus. antes*  Cláus. exactas  Saldo ajustado
 --------------------------------------------------------------------------------
-varo-japonsport     220.029.289 €   19.810.648 €             0 €   200.218.642 €
 pepemelchor         201.810.125 €   20.575.662 €             0 €   181.234.464 €
 Tony_789            188.840.941 €    4.146.245 €    11.676.204 €   173.018.492 €
-alebourrrreeeee      54.377.171 €   12.118.832 €     4.000.100 €    38.258.239 €
-javierCr7_           39.141.136 €    1.256.498 €     2.840.914 €    35.043.723 €  ← tú
-panagon               2.249.654 €    4.979.494 €    10.873.952 €   -13.603.792 €
+varo-japonsport     188.233.869 €   19.810.648 €             0 €   168.423.222 €
+alebourrrreeeee      50.477.171 €   12.118.832 €    11.000.100 €    27.358.239 €
+panagon              38.466.607 €    4.979.494 €    10.873.952 €    22.613.160 €
+javierCr7_           21.082.180 €    1.256.498 €     2.840.914 €    16.984.767 €  ← tú
 
 * Gasto oculto anterior al 2026-10-24 (cláusulas): estimado, tiende a quedarse corto,
   salvo en los managers calibrados con calibracion.json.
 
-🎯 Tu equipo: saldo real 30.841.135 € · ajustado 35.043.723 € · error 4.202.588 €
+🎯 Tu equipo: saldo real 12.782.179 € · ajustado 16.984.767 € · error 4.202.588 €
    Si el error se mantiene igual día a día, la parte exacta está funcionando:
    lo que queda es el desfase de las subidas antiguas.
 
@@ -37,40 +37,41 @@ panagon               2.249.654 €    4.979.494 €    10.873.952 €   -13.603
   2026-10-28 · alebourrrreeeee · Vlachodimos: 27.531.339 € → 27.531.539 €  (pagó 100 €)
   2026-11-04 · alebourrrreeeee · V. Chust: 5.662.967 € → 9.825.659 €  (pagó 2.000.000 €)
   2026-11-04 · alebourrrreeeee · Iván Martín: 5.586.506 € → 9.586.506 €  (pagó 2.000.000 €)
+  2026-11-07 · alebourrrreeeee · Ez Abde: 75.000.000 € → 89.000.000 €  (pagó 7.000.000 €)
   2026-11-01 · javierCr7_ · Agoumé: 20.305.222 € → 24.305.222 €  (pagó 1.850.538 €)
   2026-11-04 · javierCr7_ · Cardona: 2.923.885 € → 4.923.885 €  (pagó 990.377 €)
 
-ℹ️  165 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
+ℹ️  183 cláusulas subieron solas al revalorizarse el jugador (no cuentan).
 ```
 
 ## 📊 Subidas y bajadas de valor
 
 ```text
-Cambios de valor: 2026-11-05 → 2026-11-06
+Cambios de valor: 2026-11-06 → 2026-11-07
 
 📈 MÁS SUBEN
 ------------------------------------------------------------------------
-Aubameyang             DEL                   48.983.522 €   +2.075.656 € (+4.4%)
-Fermín                 MED                  109.683.301 €   +1.545.212 € (+1.4%)
-Bellingham             MED                  138.541.566 €   +1.382.130 € (+1.0%)
-Berenguer              DEL                   25.343.115 €   +1.376.428 € (+5.7%)
-Diomande               DEL                  119.528.836 €   +1.357.603 € (+1.1%)
-Isco                   MED                   67.883.948 €   +1.284.880 € (+1.9%)
-Nico Williams          DEL                   51.210.872 €   +1.257.316 € (+2.5%)
-Huijsen                DEF                   38.330.333 €   +1.098.261 € (+2.9%)
-Mario Soriano          MED                   45.328.416 €   +1.008.468 € (+2.3%)
-Julián Alvarez         DEL                   60.641.421 €   +1.001.310 € (+1.7%)
+Fermín                 MED                  109.687.060 €       +3.759 € (+0.0%)
+Mbappé                 DEL                  181.030.129 €       +1.423 € (+0.0%)
+Mario Soriano          MED                   45.329.515 €       +1.099 € (+0.0%)
+Pepe                   DEL                   24.509.510 €       +1.067 € (+0.0%)
+Giménez                DEF                   26.207.940 €         +943 € (+0.0%)
+Bernardo Silva         MED                   22.291.350 €         +868 € (+0.0%)
+Álex Baena             MED                  100.820.321 €         +866 € (+0.0%)
+Isco                   MED                   67.884.715 €         +767 € (+0.0%)
+Lamine Yamal           DEL                  186.045.067 €         +765 € (+0.0%)
+Raphinha               DEL                  174.938.084 €         +757 € (+0.0%)
 
 📉 MÁS BAJAN
 ------------------------------------------------------------------------
-Rodri                  MED                   86.343.554 €   -2.258.888 € (-2.5%)
-J. David               DEL                   61.328.407 €   -1.484.748 € (-2.4%)
-Cuti Romero            DEF                   53.112.704 €   -1.317.105 € (-2.4%)
-Xavi Espart            DEF                   48.048.630 €   -1.285.962 € (-2.6%)
-Kang-In Lee            MED                   70.609.380 €   -1.205.494 € (-1.7%)
-Moleiro                MED                   83.116.901 €   -1.168.245 € (-1.4%)
-Adeyemi                DEL                   52.485.251 €   -1.040.121 € (-1.9%)
-Olmo                   MED                   36.077.576 €     -857.460 € (-2.3%)
-Koski                  DEF                   42.340.880 €     -827.725 € (-1.9%)
-Vini Jr.               DEL                   55.473.427 €     -780.424 € (-1.4%)
+Bellingham             MED                  138.540.499 €       -1.067 € (-0.0%)
+De Frutos              DEL                   13.971.197 €         -301 € (-0.0%)
+Marc Roca              MED                   28.324.587 €         -126 € (-0.0%)
+Vivian                 DEF                    4.372.650 €          -71 € (-0.0%)
+Camavinga              MED                    5.503.352 €          -57 € (-0.0%)
+Antony                 DEL                   41.459.347 €          -19 € (-0.0%)
+Rioja                  MED                    3.289.839 €           -9 € (-0.0%)
+Raúl Moro              DEL                    2.322.854 €           -6 € (-0.0%)
+Félix Correia          DEL                    7.978.280 €           -4 € (-0.0%)
+Cubarsí                DEF                   64.932.337 €           -1 € (-0.0%)
 ```
